@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Radar de Passagens — Privacidade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="icon" href="img/icone.png">
+<style>
+/* Layout: documento de leitura, coluna única de ~68 caracteres, faixa de topo na cor do app */
+:root{
+  --bg:#f5f7fa; --surface:#ffffff; --ink:#121a2b; --muted:#5b6578; --line:#d9dee7; --sign:#f2b705; --sign-ink:#1a1400; --accent:#1f4fd1;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0c111c;--surface:#141b2a;--ink:#e7ebf3;--muted:#9aa4b8;--line:#2a3550;--accent:#7fa2ff;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0c111c;--surface:#141b2a;--ink:#e7ebf3;--muted:#9aa4b8;--line:#2a3550;--accent:#7fa2ff;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65;margin:0}
+.topo{background:#121a2b;color:#eef1f5;padding-inline:16px;padding-block:28px 24px}
+.topo .in,.doc{max-width:720px;margin:0 auto}
+.topo h1{font-family:var(--display);font-weight:700;font-size:40px;letter-spacing:.06em;text-transform:uppercase;margin:0;line-height:1.05;text-wrap:balance}
+.selo{display:inline-block;background:var(--sign);color:var(--sign-ink);font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;padding:2px 8px;margin-top:10px}
+.topo p{margin:12px 0 0;color:#c9d2e3;font-size:15px}
+.doc{padding-inline:16px;padding-block:28px 56px}
+.resumo{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--sign);border-radius:6px;padding:16px 18px;margin-bottom:28px}
+.resumo p{margin:0}
+h2{font-family:var(--display);font-weight:600;font-size:24px;letter-spacing:.04em;text-transform:uppercase;margin:32px 0 8px;text-wrap:balance}
+p,li{max-width:68ch}
+ul{padding-left:20px}
+li{margin-bottom:6px}
+table{border-collapse:collapse;width:100%;margin:8px 0 4px;font-size:15px}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.tabela{overflow-x:auto}
+a{color:var(--accent)}
+.email{user-select:all;word-break:break-all}
+.rodape{color:var(--muted);font-size:14px;margin-top:36px;border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+<header class="topo">
+  <div class="in">
+    <h1>Política de Privacidade</h1>
+    <span class="selo">Radar de Passagens</span>
+    <p>App para Android e iOS · Vigente desde 9 de outubro de 2026</p>
+  </div>
+</header>
+
+<main class="doc">
+  <div class="resumo">
+    <p><b>Resumo:</b> o Radar de Passagens não tem cadastro, não tem servidor próprio e não envia os seus dados para o desenvolvedor. Tudo o que você digita fica guardado só no seu aparelho.</p>
+  </div>
+
+  <h2>Quem é o responsável</h2>
+  <p>O Radar de Passagens é desenvolvido por Gelso Luis. Para dúvidas sobre esta política ou sobre os seus dados, escreva para <b class="email">appsdeveloper26@gmail.com</b>.</p>
+
+  <h2>O que o app guarda no seu aparelho</h2>
+  <div class="tabela"><table>
+    <thead><tr><th>Dado</th><th>Para quê</th></tr></thead>
+    <tbody>
+      <tr><td>Buscas: cidades de origem e destino, datas e preços encontrados</td><td>Mostrar o relatório, as melhores datas e o histórico de preços</td></tr>
+      <tr><td>Configuração dos alertas de preço</td><td>Saber quando avisar que o preço baixou</td></tr>
+      <tr><td>Seu e-mail e seu número de WhatsApp, se você informar</td><td>Preencher a mensagem que o app abre no seu app de e-mail ou no seu WhatsApp quando você toca em "Enviar"</td></tr>
+    </tbody>
+  </table></div>
+  <p>Esses dados ficam no armazenamento do próprio app, no seu celular ou tablet. O desenvolvedor não tem acesso a eles. O app não usa conta, login, publicidade nem ferramentas de análise ou rastreamento.</p>
+
+  <h2>Com quem o app se comunica</h2>
+  <ul>
+    <li><b>Google Voos (google.com):</b> para buscar preços, o app consulta a página pública do Google Voos com a rota e as datas da busca. Como em qualquer acesso à internet, o Google recebe o endereço IP do aparelho. Veja a <a href="https://policies.google.com/privacy?hl=pt-BR">Política de Privacidade do Google</a>.</li>
+    <li><b>Sites que você escolhe abrir:</b> ao tocar num preço, numa companhia aérea ou num buscador (como Kayak, Decolar ou Skyscanner), o site é aberto no navegador e passa a valer a política de privacidade desse site.</li>
+    <li><b>Seu app de e-mail e seu WhatsApp:</b> o Radar de Passagens só abre a mensagem pronta. Quem envia é você, pelo seu próprio app, e o Radar de Passagens não vê nem guarda o envio.</li>
+  </ul>
+
+  <h2>Notificações e verificação em segundo plano</h2>
+  <p>Se você ligar um alerta, o app pede permissão para mostrar notificações e, de tempos em tempos, consulta o Google Voos em segundo plano para conferir os preços. O app não usa localização, câmera, microfone, contatos nem arquivos do aparelho.</p>
+
+  <h2>Como apagar os seus dados</h2>
+  <ul>
+    <li>Toque em <b>Apagar</b> numa busca para remover a busca e os preços dela.</li>
+    <li>Apague o e-mail e o WhatsApp no painel do alerta e toque em <b>Salvar contatos</b>.</li>
+    <li>Desinstalar o app apaga tudo o que ele guardou no aparelho.</li>
+  </ul>
+
+  <h2>Seus direitos (LGPD)</h2>
+  <p>Pela Lei Geral de Proteção de Dados (Lei 13.709/2018), você pode pedir informações sobre o tratamento dos seus dados. Como o app não envia dados pessoais ao desenvolvedor, todos ficam sob o seu controle no aparelho e podem ser apagados por você a qualquer momento, como descrito acima.</p>
+
+  <h2>Crianças</h2>
+  <p>O app não é direcionado a menores de 13 anos e não coleta dados de crianças de forma consciente.</p>
+
+  <h2>Mudanças nesta política</h2>
+  <p>Se esta política mudar, a nova versão será publicada neste mesmo endereço, com a data atualizada no topo.</p>
+
+  <p class="rodape">Radar de Passagens · Política de Privacidade · versão de 9 de outubro de 2026</p>
+</main>
+</body>
+</html>

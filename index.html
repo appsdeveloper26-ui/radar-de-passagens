@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Radar de Passagens</title>
+<meta name="description" content="Compare passagens aéreas saindo de até 3 cidades, veja as datas mais baratas e receba alerta quando o preço baixar. Grátis e sem cadastro.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="icon" href="img/icone.png">
+<style>
+/* Layout: painel de embarque — faixa escura com promessa e celular, depois blocos alternados (texto ↔ tela do app), FAQ e chamada final */
+:root{
+  --navy:#121a2b; --navy-2:#1a2335; --navy-line:#2a3550; --on-navy:#eef1f5; --on-navy-2:#b9c3d6;
+  --bg:#f3f5f9; --surface:#ffffff; --ink:#121a2b; --muted:#56607a; --line:#d9dee7;
+  --sign:#f2b705; --sign-ink:#1a1400; --good:#16794a; --accent:#1f4fd1;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0c111c;--surface:#141b2a;--ink:#e7ebf3;--muted:#9aa4b8;--line:#2a3550;--good:#5fd39a;--accent:#7fa2ff;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0c111c;--surface:#141b2a;--ink:#e7ebf3;--muted:#9aa4b8;--line:#2a3550;--good:#5fd39a;--accent:#7fa2ff;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:.02em;text-wrap:balance;margin:0}
+img{max-width:100%;display:block}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--sign);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px}
+
+/* topo */
+.barra{background:var(--navy);color:var(--on-navy);position:sticky;top:env(safe-area-inset-top,0px);z-index:5;border-bottom:1px solid var(--navy-line)}
+.barra .wrap{display:flex;align-items:center;gap:12px;padding-block:10px}
+.marca{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+.marca img{width:36px;height:36px;border-radius:9px}
+.marca span{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:.08em;text-transform:uppercase}
+.barra .cta-mini{margin-left:auto}
+
+/* botões */
+.cta{display:inline-flex;align-items:center;gap:12px;background:var(--sign);color:var(--sign-ink);text-decoration:none;font-weight:600;border-radius:10px;padding:14px 22px;font-size:18px;min-height:52px;transition:transform .15s ease, box-shadow .15s ease}
+.cta:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(242,183,5,.25)}
+.cta svg{width:22px;height:22px;flex:none}
+.cta small{display:block;font-weight:500;font-size:12px;opacity:.75;line-height:1.1}
+.cta b{display:block;line-height:1.15}
+.cta-mini{background:var(--sign);color:var(--sign-ink);text-decoration:none;font-weight:600;border-radius:8px;padding:8px 14px;font-size:15px}
+
+/* herói */
+.heroi{background:var(--navy);color:var(--on-navy);overflow:hidden}
+.heroi .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:40px;align-items:center;padding-block:56px 0}
+.selo{display:inline-block;background:var(--sign);color:var(--sign-ink);font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.14em;text-transform:uppercase;padding:3px 10px}
+.heroi h1{font-size:clamp(40px,6vw,68px);line-height:1.02;margin:18px 0 18px;text-transform:uppercase;letter-spacing:.03em}
+.heroi h1 em{font-style:normal;color:var(--sign)}
+.heroi .sub{color:var(--on-navy-2);font-size:19px;max-width:46ch;margin:0 0 28px}
+.fatos{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:18px;color:var(--on-navy-2);font-size:14px;list-style:none;padding:0}
+.fatos li::before{content:"✓ ";color:var(--sign);font-weight:700}
+.celular{justify-self:center;width:min(330px,80vw);border-radius:38px;background:#0a0f1a;padding:12px;box-shadow:0 30px 80px rgba(0,0,0,.45);border:1px solid var(--navy-line);margin-bottom:-90px}
+.celular img{border-radius:28px;aspect-ratio:9/16;object-fit:cover;object-position:top;width:100%}
+.preco-flutuante{position:relative}
+.preco-flutuante .etiqueta{position:absolute;left:-28px;top:42%;background:var(--surface);color:var(--ink);border-radius:12px;padding:10px 14px;box-shadow:0 12px 30px rgba(0,0,0,.3);font-size:13px;line-height:1.35}
+.etiqueta b{display:block;font-family:var(--mono);font-size:20px;color:var(--good)}
+
+/* seções */
+section.bloco{padding-block:72px}
+.respiro{padding-top:140px !important}
+.titulo-secao{font-size:clamp(30px,4vw,44px);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px}
+.lead{color:var(--muted);max-width:60ch;margin:0 0 36px}
+
+/* passos (é uma sequência real: o uso do app) */
+.passos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;list-style:none;padding:0;margin:0;counter-reset:passo}
+.passos li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px;counter-increment:passo}
+.passos li::before{content:counter(passo);display:inline-grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--navy);color:var(--sign);font-family:var(--display);font-weight:700;font-size:20px;margin-bottom:12px}
+.passos h3{font-size:22px;margin-bottom:6px}
+.passos p{margin:0;color:var(--muted);font-size:16px}
+
+/* recursos alternados */
+.recurso{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center;padding-block:36px}
+.recurso + .recurso{border-top:1px solid var(--line)}
+.recurso.inverte .texto{order:2}
+.recurso h3{font-size:clamp(26px,3vw,36px);text-transform:uppercase;letter-spacing:.03em;margin-bottom:12px}
+.recurso p{color:var(--muted);margin:0 0 12px;max-width:52ch}
+.recurso ul{padding-left:20px;margin:0;color:var(--muted)}
+.recurso li{margin-bottom:6px}
+.tela{justify-self:center;width:min(300px,78vw);border-radius:28px;background:#0a0f1a;padding:10px;box-shadow:0 18px 50px rgba(18,26,43,.22)}
+.tela img{border-radius:20px;aspect-ratio:9/16;object-fit:cover;object-position:top;width:100%}
+
+/* tablet */
+.tablet{background:var(--navy);color:var(--on-navy)}
+.tablet .lead{color:var(--on-navy-2)}
+.tablet figure{margin:0;border-radius:22px;background:#0a0f1a;padding:12px;border:1px solid var(--navy-line);box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.tablet figure img{border-radius:12px}
+
+/* privacidade */
+.privado{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:start;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--sign);border-radius:12px;padding:28px}
+.privado .cadeado{width:52px;height:52px;border-radius:12px;background:var(--navy);display:grid;place-items:center}
+.privado h3{font-size:28px;text-transform:uppercase;margin-bottom:6px}
+.privado p{margin:0;color:var(--muted);max-width:64ch}
+
+/* FAQ */
+.faq{max-width:760px}
+.faq details{border-bottom:1px solid var(--line);padding-block:6px}
+.faq summary{cursor:pointer;font-weight:600;font-size:18px;padding-block:12px;list-style:none;display:flex;justify-content:space-between;gap:16px}
+.faq summary::after{content:"+";font-family:var(--mono);color:var(--muted)}
+.faq details[open] summary::after{content:"−"}
+.faq p{margin:0 0 14px;color:var(--muted)}
+
+/* chamada final */
+.final{background:var(--navy);color:var(--on-navy);text-align:center}
+.final h2{font-size:clamp(32px,5vw,52px);text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px}
+.final p{color:var(--on-navy-2);margin:0 auto 28px;max-width:52ch}
+footer{background:var(--navy);color:var(--on-navy-2);border-top:1px solid var(--navy-line);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between;padding-block:22px}
+footer a{color:var(--on-navy)}
+
+@media (max-width:820px){
+  .heroi .wrap{grid-template-columns:minmax(0,1fr);padding-top:36px}
+  .celular{margin-bottom:-70px}
+  .preco-flutuante .etiqueta{left:0}
+  .passos{grid-template-columns:minmax(0,1fr)}
+  .recurso{grid-template-columns:minmax(0,1fr);gap:24px}
+  .recurso.inverte .texto{order:0}
+  .privado{grid-template-columns:minmax(0,1fr)}
+  .barra .cta-mini{padding:7px 10px;font-size:14px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="barra">
+  <div class="wrap">
+    <a class="marca" href="#topo"><img src="img/icone.png" alt="" width="36" height="36"><span>Radar de Passagens</span></a>
+    <a class="cta-mini play-link" href="https://play.google.com/store/apps/details?id=com.gelsoluis.radarpassagens">Baixar grátis</a>
+  </div>
+</header>
+
+<main id="topo">
+  <section class="heroi">
+    <div class="wrap">
+      <div>
+        <span class="selo">Até 3 origens · 1 destino</span>
+        <h1>Ache a passagem <em>mais barata</em> saindo de até 3 cidades</h1>
+        <p class="sub">Escolha as cidades de onde você pode sair, o destino e as datas que servem. O Radar de Passagens compara tudo de uma vez e mostra onde e quando vale a pena comprar.</p>
+        <a class="cta play-link" href="https://play.google.com/store/apps/details?id=com.gelsoluis.radarpassagens">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 2.6v18.8c0 .5.5.8.9.6l16.4-9.4c.4-.2.4-.9 0-1.1L4.9 2c-.4-.2-.9.1-.9.6z"/></svg>
+          <span><small>Grátis para Android</small><b>Baixar na Google Play</b></span>
+        </a>
+        <ul class="fatos">
+          <li>Sem cadastro</li><li>Alerta de preço baixo</li><li>Celular e tablet</li>
+        </ul>
+      </div>
+      <div class="preco-flutuante">
+        <div class="celular"><img src="img/relatorio.webp" alt="Tela do app mostrando o melhor preço encontrado entre três cidades de origem para Lisboa" width="540" height="960"></div>
+        <div class="etiqueta" aria-hidden="true">Melhor preço<b>R$ 3.621</b>GRU → LIS · 18 a 28/11</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloco respiro" aria-labelledby="como">
+    <div class="wrap">
+      <h2 class="titulo-secao" id="como">Como funciona</h2>
+      <p class="lead">Três passos entre a ideia da viagem e o link de compra.</p>
+      <ol class="passos">
+        <li><h3>Digite as cidades</h3><p>Escreva o nome da cidade, como "Valadares" ou "Lisboa", e toque no aeroporto. São mais de 4 mil na lista.</p></li>
+        <li><h3>Escolha as datas</h3><p>Uma janela flexível (partir entre tal e tal dia, ficar 7 ou 10 noites) ou datas exatas, ida e volta ou só ida.</p></li>
+        <li><h3>Compare e compre</h3><p>Veja a tabela de preços e toque no valor para abrir a compra no site onde ele foi encontrado.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="bloco" aria-label="Recursos" style="padding-top:0">
+    <div class="wrap">
+      <div class="recurso">
+        <div class="texto">
+          <h3>Todas as datas numa tabela</h3>
+          <p>Cada linha é uma combinação de ida e volta, cada coluna uma cidade de origem. As cores vão do mais barato ao mais caro, e a estrela marca o melhor preço.</p>
+          <ul><li>Companhia, escalas e duração de cada voo</li><li>Toque no preço para comprar</li><li>Toque na companhia para abrir o site dela</li></ul>
+        </div>
+        <div class="tela"><img src="img/tabela.webp" alt="Tabela de preços por data e cidade de origem" width="540" height="960" loading="lazy"></div>
+      </div>
+      <div class="recurso inverte">
+        <div class="texto">
+          <h3>Descubra o melhor dia para viajar</h3>
+          <p>O gráfico mostra como o preço muda conforme a data de ida, e o resumo explica em português claro qual é a melhor opção, a mais barata sem escala e quanto se economiza saindo de cada cidade.</p>
+        </div>
+        <div class="tela"><img src="img/grafico.webp" alt="Gráfico de preço por data de ida e resumo com a melhor opção" width="540" height="960" loading="lazy"></div>
+      </div>
+      <div class="recurso">
+        <div class="texto">
+          <h3>Alerta quando o preço baixar</h3>
+          <p>Diga quanto quer pagar. O app confere os preços sozinho, de tempos em tempos, mesmo fechado, e avisa por notificação quando a passagem ficar no seu valor ou abaixo.</p>
+          <ul><li>Envie o aviso para o seu e-mail ou WhatsApp com um toque</li><li>Opção de avisar também quando aparecer o menor preço já visto</li></ul>
+        </div>
+        <div class="tela"><img src="img/alerta.webp" alt="Painel de alerta de preço baixo com valor de R$ 3.500" width="540" height="960" loading="lazy"></div>
+      </div>
+      <div class="recurso inverte">
+        <div class="texto">
+          <h3>Compre onde preferir</h3>
+          <p>O Radar de Passagens não vende passagens: ele mostra onde estão os melhores preços. A compra é feita no site da companhia ou da agência, com a rota e as datas já preenchidas.</p>
+          <ul><li>Atalhos para Kayak, Momondo, Skyscanner e Decolar</li><li>Sites da LATAM, GOL, Azul, TAP e outras companhias</li></ul>
+        </div>
+        <div class="tela"><img src="img/nova-busca.webp" alt="Busca por cidade com sugestão do aeroporto de Governador Valadares" width="540" height="960" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloco tablet" aria-labelledby="tab">
+    <div class="wrap">
+      <h2 class="titulo-secao" id="tab">Também no tablet</h2>
+      <p class="lead">Na tela grande, a busca fica de um lado e o relatório do outro.</p>
+      <figure><img src="img/tablet.webp" alt="App aberto num tablet com o formulário de busca e o relatório lado a lado" width="1400" height="1167" loading="lazy"></figure>
+    </div>
+  </section>
+
+  <section class="bloco" aria-label="Privacidade">
+    <div class="wrap">
+      <div class="privado">
+        <div class="cadeado" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24"><path fill="#f2b705" d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 1 1 6 0v3H9z"/></svg></div>
+        <div>
+          <h3>Sem cadastro. Seus dados ficam no seu celular.</h3>
+          <p>Não precisa criar conta nem informar senha. As buscas, os alertas e os seus contatos ficam guardados só no aparelho e nunca são enviados para nós. <a href="privacidade.html">Leia a política de privacidade</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloco" aria-labelledby="perguntas" style="padding-top:0">
+    <div class="wrap faq">
+      <h2 class="titulo-secao" id="perguntas">Perguntas frequentes</h2>
+      <details><summary>O app é grátis?</summary><p>Sim. O download e o uso são gratuitos, sem anúncios e sem assinatura.</p></details>
+      <details><summary>Preciso criar uma conta?</summary><p>Não. Basta instalar e começar a buscar.</p></details>
+      <details><summary>O app vende passagens?</summary><p>Não. Ele compara os preços e leva você ao site da companhia aérea ou da agência para comprar. O valor final é o mostrado no site de compra, que pode mudar a qualquer momento.</p></details>
+      <details><summary>De onde vêm os preços?</summary><p>De consultas a buscadores de voos públicos, como o Google Voos, que reúne as tarifas da LATAM, GOL, Azul, TAP e outras companhias. Os preços são por adulto, na classe econômica.</p></details>
+      <details><summary>Como funciona o alerta com o app fechado?</summary><p>O Android libera o app para conferir os preços de tempos em tempos, em geral a cada 1 a 3 horas. Quando o preço fica no valor que você definiu ou abaixo, chega uma notificação.</p></details>
+      <details><summary>Funciona no iPhone?</summary><p>Por enquanto o Radar de Passagens está disponível para Android, em celulares e tablets.</p></details>
+    </div>
+  </section>
+
+  <section class="bloco final" aria-labelledby="baixar">
+    <div class="wrap">
+      <h2 id="baixar">Sua próxima viagem pode sair mais barata</h2>
+      <p>Compare até 3 cidades de origem, veja as melhores datas e deixe o alerta trabalhando por você.</p>
+      <a class="cta play-link" href="https://play.google.com/store/apps/details?id=com.gelsoluis.radarpassagens">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 2.6v18.8c0 .5.5.8.9.6l16.4-9.4c.4-.2.4-.9 0-1.1L4.9 2c-.4-.2-.9.1-.9.6z"/></svg>
+        <span><small>Grátis para Android</small><b>Baixar na Google Play</b></span>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Radar de Passagens</span>
+    <a href="privacidade.html">Política de privacidade</a>
+  </div>
+</footer>
+</body>
+</html>
